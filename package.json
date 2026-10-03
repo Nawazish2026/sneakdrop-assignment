@@ -1,0 +1,27 @@
+{
+  "name": "sneakdrop-assignment",
+  "version": "1.0.0",
+  "description": "High-concurrency flash-sale sneaker drop engine with zero-oversell guarantee",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/*.test.js",
+    "test:concurrency": "node --test tests/concurrency.test.js",
+    "test:idempotency": "node --test tests/idempotency.test.js",
+    "test:limits": "node --test tests/userLimits.test.js",
+    "test:waitlist": "node --test tests/waitlist.test.js"
+  },
+  "keywords": [
+    "concurrency",
+    "flash-sale",
+    "inventory-reservation",
+    "idempotency"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

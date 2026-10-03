@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sneaker Drop | Zero-Oversell High Concurrency Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="glow-orb glow-top"></div>
+  <div class="glow-orb glow-bottom"></div>
+
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 16l3-1 2 2 3-3 4 2 4-5-2-4-5 1-4-2-3 2z"/>
+          <path d="M4 16v3h16v-3"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">SNEAKDROP // LIMITED EDITION</h1>
+        <p class="brand-subtitle">High-concurrency flash sale engine with zero-oversell guarantee</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="live-pill" id="livePill">
+        <span class="live-dot"></span>
+        <span id="liveText">LIVE SSE SYNC</span>
+      </div>
+      <button class="btn btn-outline btn-sm" id="btnReset51" title="Set drop to 51 pairs">
+        Drop: 51 Pairs
+      </button>
+      <button class="btn btn-outline btn-sm" id="btnReset20" title="Set drop to 20 pairs">
+        Drop: 20 Pairs
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Top Stats Row -->
+    <section class="inventory-banner">
+      <div class="stat-card">
+        <span class="stat-label">Available Pairs</span>
+        <span class="stat-value text-accent" id="statAvailable">--</span>
+        <span class="stat-sub">Ready to hold</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Active Holds</span>
+        <span class="stat-value text-warning" id="statHeld">--</span>
+        <span class="stat-sub">5-min countdown active</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Pairs Sold</span>
+        <span class="stat-value text-success" id="statSold">--</span>
+        <span class="stat-sub">Confirmed payments</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Waiting In Line</span>
+        <span class="stat-value text-purple" id="statWaiting">--</span>
+        <span class="stat-sub">FIFO promotion queue</span>
+      </div>
+    </section>
+
+    <!-- Main Grid: Product & User Control -->
+    <div class="main-grid">
+      <!-- Left Column: Product Showcase & Buy Deck -->
+      <section class="card product-card">
+        <div class="product-badge-row">
+          <span class="badge badge-drop" id="productDropBadge">LIMITED DROP: 20 PAIRS ONLY</span>
+          <span class="badge badge-price">$180.00 USD</span>
+        </div>
+
+        <div class="sneaker-hero">
+          <svg class="sneaker-svg" viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="soleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#8b5cf6" />
+              </linearGradient>
+              <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1e293b" />
+                <stop offset="100%" stop-color="#0f172a" />
+              </linearGradient>
+            </defs>
+            <!-- Stylized Sneaker Silhouette -->
+            <path d="M40 180 C40 160 70 150 110 150 C140 150 160 120 190 90 C220 60 250 50 280 60 C310 70 330 110 350 130 C370 150 380 170 370 190 C360 210 320 215 280 215 C200 215 100 215 40 215 Z" fill="url(#bodyGrad)" stroke="#6366f1" stroke-width="3"/>
+            <path d="M30 195 C30 190 60 185 110 185 C170 185 240 190 310 185 C350 180 375 190 375 210 C375 225 340 230 290 230 C200 230 100 230 30 230 Z" fill="url(#soleGrad)" />
+            <path d="M120 140 L170 80 M145 145 L190 95 M170 150 L210 110" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="150" cy="180" r="18" fill="#6366f1" opacity="0.4"/>
+            <text x="138" y="186" fill="#fff" font-size="14" font-weight="bold" font-family="'JetBrains Mono', monospace" id="svgStockText">20</text>
+          </svg>
+        </div>
+
+        <div class="product-info">
+          <h2 class="product-title" id="productName">Air Velocity Limited Edition</h2>
+          <p class="product-desc" id="productDesc">
+            Ultra-limited launch. Strictly limited pairs manufactured globally. ACID-compliant checkout with deterministic concurrency control.
+          </p>
+        </div>
+
+        <!-- Dynamic User Action Panel -->
+        <div class="action-panel" id="actionPanel">
+          <!-- State 1: Buy / Join Waitlist CTA -->
+          <div id="ctaBlock" class="cta-block">
+            <button class="btn btn-primary btn-lg btn-block" id="btnBuyHold">
+              <span class="btn-icon">⚡</span>
+              <span id="btnBuyText">BUY NOW (HOLD 5 MINS)</span>
+            </button>
+            <button class="btn btn-purple btn-lg btn-block hidden" id="btnJoinWaitlist">
+              <span class="btn-icon">⏳</span>
+              <span>JOIN WAITING LINE</span>
+            </button>
+            <p class="cta-hint" id="ctaHint">Rule 1: Pair held for 5 minutes. Rule 2: Max 1 hold, max 2 purchases per user.</p>
+          </div>
+
+          <!-- State 2: Active Hold Countdown Panel -->
+          <div id="holdBlock" class="hold-block hidden">
+            <div class="hold-header">
+              <div class="hold-badge">
+                <span class="pulse-indicator"></span>
+                <span>PAIR HELD FOR YOU</span>
+              </div>
+              <button class="btn-text-danger" id="btnCancelHold">Cancel Hold</button>
+            </div>
+
+            <div class="countdown-display">
+              <div class="timer-box">
+                <span class="timer-digits" id="timerDigits">05:00</span>
+                <span class="timer-label">TIME REMAINING TO PAY</span>
+              </div>
+              <div class="timer-progress-bar">
+                <div class="timer-progress-fill" id="timerProgress"></div>
+              </div>
+            </div>
+
+            <!-- Fake Payment Webhook Simulation Controls -->
+            <div class="payment-deck">
+              <div class="deck-title">
+                <span>Rule 4: Fake Payment Webhook Simulator</span>
+                <span class="deck-subtitle">Simulate real-world messy networks</span>
+              </div>
+              <div class="payment-buttons-grid">
+                <button class="btn btn-success" id="btnPayNormal">
+                  💳 Pay Now (Standard Webhook)
+                </button>
+                <button class="btn btn-outline" id="btnPayDuplicate" title="Fires duplicate webhooks concurrently">
+                  ⚡ Simulate Duplicate Webhook (2x)
+                </button>
+                <button class="btn btn-outline" id="btnPayLate" title="Forces hold expiration before webhook arrives">
+                  ⏳ Simulate Late Webhook (Auto-Refund)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- State 3: User in Waitlist -->
+          <div id="waitlistBlock" class="waitlist-block hidden">
+            <div class="waitlist-card">
+              <div class="waitlist-icon">⏳</div>
+              <div class="waitlist-info">
+                <h3>You are in the Waiting Line</h3>
+                <p>Position: <strong class="text-accent" id="userWaitPosition">#1</strong> in line</p>
+                <span class="waitlist-subtext">When an active hold expires without payment, you will automatically be promoted and given your own 5-minute hold!</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- State 4: Purchased Max Limit Reached -->
+          <div id="limitBlock" class="limit-block hidden">
+            <div class="limit-card">
+              <div class="limit-icon">🎉</div>
+              <div>
+                <h3>Drop Limit Reached</h3>
+                <p>You have successfully bought the maximum allowed <strong class="text-success">2 pairs</strong>. Thank you for participating!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="feedbackAlert" class="feedback-alert hidden"></div>
+      </section>
+
+      <!-- Right Column: User Switcher, Concurrency Stress Test & Event Log -->
+      <section class="side-column">
+        <!-- User Switcher Persona -->
+        <div class="card persona-card">
+          <div class="card-header">
+            <h3>👤 Active User Profile</h3>
+            <span class="badge badge-info" id="userPurchasedBadge">Purchased: 0/2</span>
+          </div>
+          <div class="persona-row">
+            <label for="userSelect" class="form-label">Simulate as user:</label>
+            <div class="user-select-group">
+              <select id="userSelect" class="custom-select">
+                <option value="user_alice">Alice (user_alice)</option>
+                <option value="user_bob">Bob (user_bob)</option>
+                <option value="user_charlie">Charlie (user_charlie)</option>
+                <option value="user_david">David (user_david)</option>
+              </select>
+              <button class="btn btn-outline btn-sm" id="btnRandomUser">+ New User</button>
+            </div>
+          </div>
+          <div class="user-limits-info">
+            <div class="limit-item">
+              <span class="limit-dot"></span>
+              <span>Active hold: <strong id="userHoldStatus">None</strong></span>
+            </div>
+            <div class="limit-item">
+              <span class="limit-dot"></span>
+              <span>Waitlist status: <strong id="userWaitStatus">Not in line</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviewer Demo: Concurrency Stress Test Panel -->
+        <div class="card stress-test-card">
+          <div class="card-header">
+            <div>
+              <h3>🔥 Concurrency Stress Test</h3>
+              <p class="card-sub">Simulate 50 users clicking "Buy" at the exact same millisecond</p>
+            </div>
+            <span class="badge badge-warning">Zero Oversell Proof</span>
+          </div>
+          <p class="stress-desc">
+            In the previous sale, 51 pairs were sold when only 20 existed. Test our atomic transaction engine under high concurrent load:
+          </p>
+          <button class="btn btn-warning btn-block" id="btnRun51Incident" style="margin-bottom: 0.6rem;">
+            🔥 Simulate The 51-Buyer Incident
+          </button>
+          <button class="btn btn-outline btn-block" id="btnRunStressTest">
+            ⚡ Run 100 Concurrent Buyers Burst
+          </button>
+          <div id="stressResultBox" class="stress-result hidden"></div>
+        </div>
+
+        <!-- Real-Time Audit & Webhook Event Feed -->
+        <div class="card log-card">
+          <div class="card-header">
+            <h3>📡 Real-Time Audit & Event Stream</h3>
+            <button class="btn-text" id="btnClearLogs">Clear</button>
+          </div>
+          <div class="event-feed" id="eventFeed">
+            <div class="feed-empty">Connecting to real-time event stream...</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>Sneaker Drop System Architecture • ACID SQLite Transactions • Background TTL Expiration • Webhook Idempotency</p>
+      <p class="footer-links">
+        <a href="/api/status" target="_blank">API Status</a> • 
+        <a href="/api/audit-logs" target="_blank">Audit Trail</a> • 
+        <a href="/notes.md" target="_blank">System Notes</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

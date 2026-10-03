@@ -1,19 +1,10 @@
 # Dependencies
 node_modules/
-vendor/
-.venv/
-venv/
-__pycache__/
-*.pyc
 
 # Build output
 dist/
 build/
 out/
-.next/
-target/
-bin/
-obj/
 
 # Environment and secrets
 .env
@@ -24,6 +15,7 @@ obj/
 *.db
 *.sqlite
 *.sqlite3
+data/
 
 # Logs
 *.log
@@ -37,3 +29,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+*.swo
+*~
+
+# Agent / AI tool files
+.agents/
+.gemini/
